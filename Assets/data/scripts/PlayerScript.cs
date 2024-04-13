@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
+using StarterAssets;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,12 +15,20 @@ public class PlayerScript : MonoBehaviour {
 	public Vector3 circleStartingPos;
 	public bool isAnimating;
 	public bool isInDialogue;
-	private bool isAnimatingLast;
-	private bool isInDialogueLast;
 
-	private Animator circleAnim;
+	public ThirdPersonController tpController;
 	public PlayerInput playerInput;
 	public CharacterController characterController;
+	public Transform cameraTarget;
+	public CinemachineBrain cBrain;
+	public CinemachineVirtualCamera entryAndExitCamera;
+	public CinemachineVirtualCamera playerFollowCamera;
+
+
+	private Vector3 cameraTargetStartPos;
+	private bool isAnimatingLast = true;
+	private bool isInDialogueLast = true;
+	private Animator circleAnim;
 
 
 	// Start is called before the first frame update
@@ -26,11 +36,11 @@ public class PlayerScript : MonoBehaviour {
 		armatureZeroPos = armature.localPosition;
 		circleAnim = GetComponent<Animator>();
 		circleStartingPos = circle.localPosition;
+		cameraTargetStartPos = cameraTarget.localPosition;
 	}
 
 	// Update is called once per frame
 	void Update() {
-		//Debug
 		if (!isAnimating) {
 			if (!circleAnim.GetCurrentAnimatorStateInfo(0).IsName("idle") && Input.GetKeyDown(KeyCode.O)) {
 				isAnimating = true;
@@ -52,20 +62,29 @@ public class PlayerScript : MonoBehaviour {
 		}
 
 		if (isAnimating != isAnimatingLast || isInDialogue != isInDialogueLast) {
-			
 			//Set newest values
 			isAnimatingLast = isAnimating;
 			isInDialogueLast = isInDialogue;
-			
+
 			//Turn the player controls off if in dialogue, or animating
 			if (isAnimating || isInDialogue) {
 				playerInput.SwitchCurrentActionMap("Dialogue");
+				switchToCamera(entryAndExitCamera);
 			}
-			
+
 			//Otherwise turn them back on
 			else {
 				playerInput.SwitchCurrentActionMap("Player");
+				switchToCamera(playerFollowCamera);
 			}
 		}
+	}
+
+	void switchToCamera(CinemachineVirtualCamera cam) {
+		entryAndExitCamera.enabled = false;
+		playerFollowCamera.enabled = false;
+
+		cam.enabled = true;
+
 	}
 }
