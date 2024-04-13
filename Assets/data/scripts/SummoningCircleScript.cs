@@ -46,65 +46,12 @@ public class SummoningCircleScript : MonoBehaviour {
 		circle_mat.SetFloat("_dissolveAmount", max);
 
 			
-		/*currentCircle = max;
-		currentRunes = max;
-		currentRunes_a = max;
-		currentRunes_b = max;
-		currentRunes_c = max;
-		currentRunes_d = max;
-		currentRunes_e = max;*/
 	}
 
 	// Update is called once per frame
-	void Update() {/*
-		if (show) {
-			currentRunes -= (Time.deltaTime) * speed/5;
-
-			currentRunes_a -= (Time.deltaTime * (5/9));
-			currentRunes_b -= (Time.deltaTime * (4/9));
-			currentRunes_c -= (Time.deltaTime * (3/9));
-			currentRunes_d -= (Time.deltaTime * (2/9));
-			currentRunes_e -= (Time.deltaTime * (1/9));
-		}
+	void Update() {
 		
-		else {
-			currentRunes += (Time.deltaTime) * speed/5;
-
-			currentRunes_a += (Time.deltaTime) * speed;
-			currentRunes_b += (Time.deltaTime) * speed;
-			currentRunes_c += (Time.deltaTime) * speed;
-			currentRunes_d += (Time.deltaTime) * speed;
-			currentRunes_e += (Time.deltaTime) * speed;
-		}
-
-		currentRunes = Mathf.Min(max, Mathf.Max(min, currentRunes));
-		currentRunes_a = Mathf.Min(max, Mathf.Max(min, currentRunes_a));
-		currentRunes_b = Mathf.Min(max, Mathf.Max(min, currentRunes_b));
-		currentRunes_c = Mathf.Min(max, Mathf.Max(min, currentRunes_c));
-		currentRunes_d = Mathf.Min(max, Mathf.Max(min, currentRunes_d));
-		currentRunes_e = Mathf.Min(max, Mathf.Max(min, currentRunes_e));
-
-		
-		a_mat.SetFloat("_dissolveAmount", currentRunes_a);
-		b_mat.SetFloat("_dissolveAmount", currentRunes_b);
-		c_mat.SetFloat("_dissolveAmount", currentRunes_c);
-		d_mat.SetFloat("_dissolveAmount", currentRunes_d);
-		e_mat.SetFloat("_dissolveAmount", currentRunes_e);
-
-		if (show && currentRunes_e == min) {
-			currentCircle -= (Time.deltaTime) * speed;
-		}
-		else {
-			currentCircle += (Time.deltaTime) * speed;
-		}
-
-		currentCircle = Mathf.Min(max, Mathf.Max(min, currentCircle));
-		circle_mat.SetFloat("_dissolveAmount", currentCircle);*/
 	}
 
 
-	// Update is called once per frame
-	public void Show() {
-		show = true;
-	}
 }
