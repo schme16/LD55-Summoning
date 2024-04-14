@@ -13,6 +13,7 @@ public class PlayerScript : MonoBehaviour {
 	public Vector3 spawnPointOffset;
 	public Vector3 armatureZeroPos;
 	public Vector3 circleStartingPos;
+	public Vector3 circleStartingEuler;
 	public bool isAnimating;
 	public bool isInDialogue;
 
@@ -36,6 +37,7 @@ public class PlayerScript : MonoBehaviour {
 		armatureZeroPos = armature.localPosition;
 		circleAnim = GetComponent<Animator>();
 		circleStartingPos = circle.localPosition;
+		circleStartingEuler = circle.localEulerAngles;
 		cameraTargetStartPos = cameraTarget.localPosition;
 	}
 
@@ -50,6 +52,7 @@ public class PlayerScript : MonoBehaviour {
 				armature.localPosition = armatureZeroPos;
 
 				transform.position = spawnPoint.position + spawnPointOffset;
+
 				circle.localPosition = circleStartingPos;
 
 				circleAnim.SetTrigger("entering");
@@ -78,6 +81,10 @@ public class PlayerScript : MonoBehaviour {
 				switchToCamera(playerFollowCamera);
 			}
 		}
+
+		circle.localEulerAngles = new Vector3(circleStartingEuler.x, armature.localEulerAngles.y,
+			circleStartingEuler.z + circleStartingEuler.z);
+		Debug.Log(circle.localEulerAngles);
 	}
 
 	void switchToCamera(CinemachineVirtualCamera cam) {
@@ -85,6 +92,5 @@ public class PlayerScript : MonoBehaviour {
 		playerFollowCamera.enabled = false;
 
 		cam.enabled = true;
-
 	}
 }
