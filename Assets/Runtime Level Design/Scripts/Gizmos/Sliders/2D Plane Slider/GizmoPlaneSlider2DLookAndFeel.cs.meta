@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 40006e610f830de4ca2404d43504680c
+timeCreated: 1518963277
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 52325
+  packageName: Runtime Level Design
+  packageVersion: 2.3.3
+  assetPath: Assets/Runtime Level Design/Scripts/Gizmos/Sliders/2D Plane Slider/GizmoPlaneSlider2DLookAndFeel.cs
+  uploadId: 641700

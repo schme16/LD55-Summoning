@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
@@ -5,13 +6,18 @@ using StarterAssets;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using PixelCrushers.DialogueSystem;
+using Unity.VisualScripting;
+using UnityEditor.Searcher;
+using Random = UnityEngine.Random;
 
 public class PlayerScript : MonoBehaviour {
 	public Transform circle;
 	public Transform spawnPoint;
 	public Transform armature;
 	public Transform oldGuyNpc;
+	public Transform fetchItemsHolder;
 	public Transform[] spawnPoints;
+	public Transform[] fetchItemsSpawnLocations;
 	public Vector3 spawnPointOffset;
 	public Vector3 armatureZeroPos;
 	public Vector3 circleStartingPos;
@@ -34,6 +40,22 @@ public class PlayerScript : MonoBehaviour {
 	public DialogueEntry dialogue;
 
 
+	//UI
+	public GameObject UIPressEToCollect;
+
+
+	//Quest stuff
+	public string questType = "none";
+	public string questTypeLast = "none";
+	public string questName;
+	public Transform questItem;
+	public bool canCollectQuestItem;
+
+
+	//Prefabs
+	public Transform HeartPillsPrefab;
+
+
 	private Vector3 cameraTargetStartPos;
 	private bool isAnimatingLast = true;
 	private bool isInDialogueLast = true;
@@ -47,8 +69,10 @@ public class PlayerScript : MonoBehaviour {
 		circleStartingPos = circle.localPosition;
 		circleStartingEuler = circle.localEulerAngles;
 		cameraTargetStartPos = cameraTarget.localPosition;
-		cTargets.m_Targets[0].target = transform;
-		Cursor.lockState = CursorLockMode.Locked;
+		cTargets.m_Targets[0].target = armature;
+
+
+		ResetUI();
 	}
 
 	// Update is called once per frame
@@ -64,6 +88,7 @@ public class PlayerScript : MonoBehaviour {
 				transform.position = spawnPoint.position + spawnPointOffset;
 
 				circle.localPosition = circleStartingPos;
+				Cursor.lockState = CursorLockMode.Locked;
 
 				circleAnim.SetTrigger("entering");
 			}
@@ -83,12 +108,15 @@ public class PlayerScript : MonoBehaviour {
 			if (isAnimating) {
 				playerInput.SwitchCurrentActionMap("Dialogue");
 				playerInput.DeactivateInput();
+				Cursor.lockState = CursorLockMode.Locked;
 				switchToCamera(entryAndExitCamera);
 			}
 
 			else if (isInDialogue && DialogueTarget) {
 				playerInput.SwitchCurrentActionMap("Dialogue");
 				playerInput.DeactivateInput();
+				inputs.cursorInputForLook = false;
+				Cursor.lockState = CursorLockMode.Confined;
 
 				transform.LookAt(
 					new Vector3(DialogueTarget.position.x, transform.position.y, DialogueTarget.position.z));
@@ -100,6 +128,9 @@ public class PlayerScript : MonoBehaviour {
 			else {
 				playerInput.ActivateInput();
 				playerInput.SwitchCurrentActionMap("Player");
+
+				inputs.cursorInputForLook = true;
+
 				switchToCamera(playerFollowCamera);
 			}
 		}
@@ -108,7 +139,69 @@ public class PlayerScript : MonoBehaviour {
 			circleStartingEuler.z + circleStartingEuler.z);
 
 		if (!isInDialogue && Input.GetKeyDown(KeyCode.I)) {
-			DialogueManager.StartConversation("Not interested", armature, oldGuyNpc, 0);
+			Debug.Log(1111111);
+			if (QuestLog.CurrentQuestState(questName) != QuestLog.ActiveStateString) {
+				Debug.Log(222222);
+
+				DialogueManager.StartConversation("Old Guy's Medicine", armature, oldGuyNpc, 0);
+			}
+		}
+
+
+		//Quest on change events
+		if (questType != questTypeLast) {
+			switch (questType) {
+				case "none":
+
+					break;
+
+				case "fetch":
+
+					break;
+
+				case "paint":
+
+					break;
+
+				case "clean":
+
+					break;
+
+				case "move":
+
+					break;
+			}
+		}
+
+
+		//Quest each frame events
+		switch (questType) {
+			case "none":
+
+				break;
+
+			case "fetch":
+				if (canCollectQuestItem && Input.GetKeyDown(KeyCode.E)) {
+					canCollectQuestItem = false;
+					Destroy(questItem.gameObject);
+					ResetUI();
+					QuestLog.SetQuestState(questName, QuestState.ReturnToNPC);
+
+				}
+
+				break;
+
+			case "paint":
+
+				break;
+
+			case "clean":
+
+				break;
+
+			case "move":
+
+				break;
 		}
 	}
 
@@ -131,28 +224,66 @@ public class PlayerScript : MonoBehaviour {
 		DialogueManager.StopAllConversations();
 	}
 
+	public void SpawnFetchQuestObject(Transform obj, Vector3 pos) {
+		questItem = Instantiate(obj, pos, Quaternion.identity, fetchItemsHolder);
+	}
+
+	public void SetQuestType(string type, string quest, Transform obj = null) {
+		questType = type;
+		questName = quest;
+		if (obj != null) {
+			SpawnFetchQuestObject(obj,
+				fetchItemsSpawnLocations[Random.Range(0, fetchItemsSpawnLocations.Length)].position);
+		}
+	}
+
+	void ResetUI() {
+		UIPressEToCollect.SetActive(false);
+	}
+
 	public void QuestFailed() {
 		var state = QuestLog.CurrentQuestState("QuestFailed");
-		if (state == "active") {
+		if (state == QuestLog.ActiveStateString) {
 			QuestLog.SetQuestState("QuestFailed", QuestState.Unassigned);
 			isAnimating = true;
 			circleAnim.SetTrigger("leaving");
 		}
 	}
 
-	public void QuestMyHeart() {
-		var state = QuestLog.CurrentQuestState("QuestMyHeart");
-		if (state == "active") {
-			QuestLog.SetQuestState("QuestFailed", QuestState.Unassigned);
+	public void QuestSuccess() {
+		var state = QuestLog.CurrentQuestState("QuestSuccess");
+		if (state == QuestLog.ActiveStateString) {
+			QuestLog.SetQuestState("QuestSuccess", QuestState.Unassigned);
 			isAnimating = true;
 			circleAnim.SetTrigger("leaving");
+		}
+	}
+
+	public void QuestMyHeartPills() {
+		var state = QuestLog.CurrentQuestState("QuestMyHeartPills");
+		if (state == QuestLog.ActiveStateString) {
+			SetQuestType("fetch", "QuestMyHeartPills", HeartPillsPrefab);
 		}
 	}
 
 	public void StartFailedConversation() {
-		var state = QuestLog.CurrentQuestState("QuestFailed");
-		if (state == "active") {
+		var state = QuestLog.CurrentQuestState("StartFailedConversation");
+		if (state ==QuestLog.ActiveStateString) {
 			DialogueManager.StartConversation("FailedSpeech", armature, armature, 0);
+		}
+	}
+
+	public void TriggerEnter(Collider other) {
+		if (other.transform == questItem) {
+			UIPressEToCollect.SetActive(true);
+			canCollectQuestItem = true;
+		}
+	}
+
+	public void TriggerExit(Collider other) {
+		if (other.transform == questItem) {
+			UIPressEToCollect.SetActive(false);
+			canCollectQuestItem = false;
 		}
 	}
 }

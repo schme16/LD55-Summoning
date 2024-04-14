@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 98241052b2493964ab3adad75f144d97
+timeCreated: 1526645206
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 52325
+  packageName: Runtime Level Design
+  packageVersion: 2.3.3
+  assetPath: Assets/Runtime Level Design/Demo Scenes/Demo.unity
+  uploadId: 641700
