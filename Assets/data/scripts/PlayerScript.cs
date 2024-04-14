@@ -4,6 +4,7 @@ using Cinemachine;
 using StarterAssets;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using PixelCrushers.DialogueSystem;
 
 public class PlayerScript : MonoBehaviour {
 	public Transform circle;
@@ -21,10 +22,15 @@ public class PlayerScript : MonoBehaviour {
 	public PlayerInput playerInput;
 	public CharacterController characterController;
 	public Transform cameraTarget;
+	public Transform DialogueTarget;
 	public CinemachineBrain cBrain;
 	public CinemachineVirtualCamera entryAndExitCamera;
 	public CinemachineVirtualCamera playerFollowCamera;
+	public CinemachineVirtualCamera dialogueCamera;
+	public CinemachineTargetGroup cTargets;
 
+	public DialogueEntry dialogue;
+	
 
 	private Vector3 cameraTargetStartPos;
 	private bool isAnimatingLast = true;
@@ -39,6 +45,7 @@ public class PlayerScript : MonoBehaviour {
 		circleStartingPos = circle.localPosition;
 		circleStartingEuler = circle.localEulerAngles;
 		cameraTargetStartPos = cameraTarget.localPosition;
+		cTargets.m_Targets[0].target = transform;
 	}
 
 	// Update is called once per frame
@@ -70,9 +77,14 @@ public class PlayerScript : MonoBehaviour {
 			isInDialogueLast = isInDialogue;
 
 			//Turn the player controls off if in dialogue, or animating
-			if (isAnimating || isInDialogue) {
+			if (isAnimating) {
 				playerInput.SwitchCurrentActionMap("Dialogue");
 				switchToCamera(entryAndExitCamera);
+			}
+			else if (isInDialogue && !!DialogueTarget) {
+				playerInput.SwitchCurrentActionMap("Dialogue");
+				armature.LookAt(DialogueTarget);
+				switchToCamera(dialogueCamera);
 			}
 
 			//Otherwise turn them back on
@@ -84,12 +96,16 @@ public class PlayerScript : MonoBehaviour {
 
 		circle.localEulerAngles = new Vector3(circleStartingEuler.x, armature.localEulerAngles.y,
 			circleStartingEuler.z + circleStartingEuler.z);
-		Debug.Log(circle.localEulerAngles);
+
+		if (Input.GetKeyDown(KeyCode.I)) {
+			isInDialogue = true;
+		}
 	}
 
 	void switchToCamera(CinemachineVirtualCamera cam) {
 		entryAndExitCamera.enabled = false;
 		playerFollowCamera.enabled = false;
+		dialogueCamera.enabled = false;
 
 		cam.enabled = true;
 	}
