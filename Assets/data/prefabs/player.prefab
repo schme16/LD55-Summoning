@@ -4115,8 +4115,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7908342053952440830}
   - {fileID: 4725598431307472206}
+  - {fileID: 7908342053952440830}
   - {fileID: 8718877573231893086}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4163,7 +4163,42 @@ MonoBehaviour:
   - {fileID: 0}
   spawnPointOffset: {x: 0, y: 0.32, z: 0}
   armatureZeroPos: {x: 0, y: 0, z: 0}
+  circleStartingPos: {x: 0, y: 0, z: 0}
+  circleStartingEuler: {x: 0, y: 0, z: 0}
   isAnimating: 0
+  isInDialogue: 0
+  tpController: {fileID: 0}
+  playerInput: {fileID: 0}
+  characterController: {fileID: 0}
+  cameraTarget: {fileID: 0}
+  DialogueTarget: {fileID: 0}
+  cBrain: {fileID: 0}
+  entryAndExitCamera: {fileID: 0}
+  playerFollowCamera: {fileID: 0}
+  dialogueCamera: {fileID: 0}
+  cTargets: {fileID: 0}
+  dialogue:
+    id: 0
+    fields: []
+    conversationID: 0
+    isRoot: 0
+    isGroup: 0
+    nodeColor: 
+    delaySimStatus: 0
+    falseConditionAction: 
+    conditionPriority: 2
+    outgoingLinks: []
+    conditionsString: 
+    userScript: 
+    onExecute:
+      m_PersistentCalls:
+        m_Calls: []
+    canvasRect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 160
+      height: 30
 --- !u!1 &8759280515646779238
 GameObject:
   m_ObjectHideFlags: 0
