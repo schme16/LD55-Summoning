@@ -6,8 +6,6 @@ using StarterAssets;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using PixelCrushers.DialogueSystem;
-using Unity.VisualScripting;
-using UnityEditor.Searcher;
 using Random = UnityEngine.Random;
 
 public class PlayerScript : MonoBehaviour {
@@ -39,9 +37,12 @@ public class PlayerScript : MonoBehaviour {
 
 	public DialogueEntry dialogue;
 
+	//NPC holder
+	public NPCScript nearbyNPC;
 
 	//UI
 	public GameObject UIPressEToCollect;
+	public GameObject UIPressEToTalk;
 
 
 	//Quest stuff
@@ -51,6 +52,14 @@ public class PlayerScript : MonoBehaviour {
 	public Transform questItem;
 	public bool canCollectQuestItem;
 
+	
+	//Create a quest structure item
+	//Should allow me to have a bunch of preset quests
+	public struct Quest {
+		private string questType;
+		private string questName;
+		private Transform questItem;
+	}
 
 	//Prefabs
 	public Transform HeartPillsPrefab;
@@ -138,6 +147,7 @@ public class PlayerScript : MonoBehaviour {
 		circle.localEulerAngles = new Vector3(circleStartingEuler.x, armature.localEulerAngles.y,
 			circleStartingEuler.z + circleStartingEuler.z);
 
+		/*
 		if (!isInDialogue && Input.GetKeyDown(KeyCode.I)) {
 			Debug.Log(1111111);
 			if (QuestLog.CurrentQuestState(questName) != QuestLog.ActiveStateString) {
@@ -145,6 +155,21 @@ public class PlayerScript : MonoBehaviour {
 
 				DialogueManager.StartConversation("Old Guy's Medicine", armature, oldGuyNpc, 0);
 			}
+		}*/
+
+		if (!isAnimating && !isInDialogue) {
+			if (nearbyNPC) {
+				UIPressEToTalk.SetActive(true);
+				if (Input.GetKeyDown(KeyCode.E)) {
+					DialogueManager.StartConversation(nearbyNPC.dialogue, armature, nearbyNPC.transform, 0);
+				}
+			}
+			else {
+				UIPressEToTalk.SetActive(false);
+			}
+		}
+		else {
+			ResetUI();
 		}
 
 
@@ -186,7 +211,6 @@ public class PlayerScript : MonoBehaviour {
 					Destroy(questItem.gameObject);
 					ResetUI();
 					QuestLog.SetQuestState(questName, QuestState.ReturnToNPC);
-
 				}
 
 				break;
@@ -239,6 +263,7 @@ public class PlayerScript : MonoBehaviour {
 
 	void ResetUI() {
 		UIPressEToCollect.SetActive(false);
+		UIPressEToTalk.SetActive(false);
 	}
 
 	public void QuestFailed() {
@@ -268,7 +293,7 @@ public class PlayerScript : MonoBehaviour {
 
 	public void StartFailedConversation() {
 		var state = QuestLog.CurrentQuestState("StartFailedConversation");
-		if (state ==QuestLog.ActiveStateString) {
+		if (state == QuestLog.ActiveStateString) {
 			DialogueManager.StartConversation("FailedSpeech", armature, armature, 0);
 		}
 	}
@@ -278,12 +303,24 @@ public class PlayerScript : MonoBehaviour {
 			UIPressEToCollect.SetActive(true);
 			canCollectQuestItem = true;
 		}
+		else if (other.CompareTag("NPC")) {
+			NPCScript npc = other.GetComponent<NPCScript>();
+			if (npc.dialogue.Length > 0) {
+				nearbyNPC = npc;
+			}
+		}
 	}
 
 	public void TriggerExit(Collider other) {
 		if (other.transform == questItem) {
 			UIPressEToCollect.SetActive(false);
 			canCollectQuestItem = false;
+		}
+		else if (other.CompareTag("NPC")) {
+			NPCScript npc = other.GetComponent<NPCScript>();
+			if (nearbyNPC == npc) {
+				nearbyNPC = null;
+			}
 		}
 	}
 }

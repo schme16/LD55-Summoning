@@ -220,6 +220,20 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: 
+  - id: 2
+    fields:
+    - title: Name
+      value: CurrentItem
+      type: 0
+      typeString: 
+    - title: Initial Value
+      value: Heart Pills
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: The ur item.
+      type: 0
+      typeString: 
   conversations:
   - id: 1
     fields:
@@ -321,6 +335,12 @@ MonoBehaviour:
         destinationDialogueID: 12
         isConnector: 0
         priority: 2
+      - originConversationID: 1
+        originDialogueID: 0
+        destinationConversationID: 1
+        destinationDialogueID: 15
+        isConnector: 0
+        priority: 0
       conditionsString: 
       userScript: 
       onExecute:
@@ -328,8 +348,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 397.3913
-        y: 34.347824
+        x: 956.8847
+        y: 16.626312
         width: 160
         height: 30
     - id: 1
@@ -640,11 +660,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: 'Oh good!
-
-          Now I need someone to fetch me my heart pills
-
-'
+        value: "Oh good!\nNow I need someone to fetch me my [var=CurrentItem]\t\n"
         type: 0
         typeString: 
       - title: Sequence
@@ -673,7 +689,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 265.39236
-        y: 390.17706
+        y: 388.9112
         width: 160
         height: 30
     - id: 7
@@ -996,8 +1012,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 717.9698
-        y: 90.514175
+        x: 954.6785
+        y: 147.47618
         width: 160
         height: 30
     - id: 13
@@ -1051,8 +1067,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 785.9988
-        y: 212.82878
+        x: 967.0112
+        y: 262.19598
         width: 160
         height: 30
     - id: 14
@@ -1103,13 +1119,62 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 882.2013
-        y: 343.84143
+        x: 972.07495
+        y: 383.0821
+        width: 160
+        height: 30
+    - id: 15
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: 
+      - title: Description
+        value: 
+        type: 0
+        typeString: 
+      - title: Actor
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Dialogue Text
+        value: Cmon hurry up!
+        type: 0
+        typeString: 
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: 
+      conversationID: 1
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Passthrough
+      conditionPriority: 2
+      outgoingLinks: []
+      conditionsString: CurrentQuestState("QuestMyHeartPills") == "active"
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1284.7327
+        y: 108.39844
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 57.970215, y: 49.085632}
-    canvasZoom: 0.7000004
+    canvasScrollPosition: {x: 96.5983, y: 17.721497}
+    canvasZoom: 0.7900003
   - id: 2
     fields:
     - title: Title
