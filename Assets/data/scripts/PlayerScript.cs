@@ -1,6 +1,7 @@
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable ArrangeTypeMemberModifiers
 
+using System;
 using Cinemachine;
 using StarterAssets;
 using UnityEngine;
@@ -8,6 +9,7 @@ using UnityEngine.InputSystem;
 using PixelCrushers.DialogueSystem;
 using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class PlayerScript : MonoBehaviour {
 	public Transform circle;
@@ -95,6 +97,11 @@ public class PlayerScript : MonoBehaviour {
 
 		state = "entering level";
 
+		QuestLog.AddQuestStateObserver("QuestFetch", LuaWatchFrequency.EveryDialogueEntry, QuestFetch);
+		QuestLog.AddQuestStateObserver("QuestFailed", LuaWatchFrequency.EveryDialogueEntry, QuestFailed);
+		QuestLog.AddQuestStateObserver("QuestSuccess", LuaWatchFrequency.EveryDialogueEntry, QuestSuccess);
+		QuestLog.AddQuestStateObserver("StartFailedConversation", LuaWatchFrequency.EveryDialogueEntry, StartFailedConversation);
+
 
 		SetSpawnPoint();
 
@@ -102,6 +109,7 @@ public class PlayerScript : MonoBehaviour {
 
 		ResetUI();
 	}
+
 
 	// Update is called once per frame
 	void Update() {
@@ -144,7 +152,7 @@ public class PlayerScript : MonoBehaviour {
 					var item = Instantiate(questManager.quest.questItem);
 					item.parent = questManager.trophyHolder;
 					questManager.trophies.Add(item);
-					
+
 					Destroy(questManager.quest.questItem.gameObject);
 
 					UIPressEToCollect.SetActive(false);
@@ -190,6 +198,8 @@ public class PlayerScript : MonoBehaviour {
 					//Clear ui
 					ResetUI();
 
+					ResetAllQuests();
+
 					//More the armature back to "zero"
 					armature.localPosition = armatureZeroPos;
 
@@ -215,16 +225,16 @@ public class PlayerScript : MonoBehaviour {
 					armature.LookAt(new Vector3(lookAtOnSpawn.x, armature.position.y, lookAtOnSpawn.z));
 
 					if (isHomeBase) {
-						questManager.StartRandomQuest();
-						
+						questManager.quest = new QuestManagerScript.Quest();
+
 						//Pick a new random time for the exit portal
 						questManager.randCount = Random.Range(30, 90);
-
 					}
-					
-					if (!isHomeBase && questManager.quest.questItem != null) {
-						DialogueLua.SetVariable("CurrentItem", questManager.quest.questItem.GetComponent<CollectableItemScript>().itemName);
-						Debug.Log(questManager.quest.questItem.GetComponent<CollectableItemScript>().itemName);
+					else {
+						if (questManager.quest.questItemPrefab != null) {
+							DialogueLua.SetVariable("CurrentItem", questManager.quest.questItemPrefab.GetComponent<CollectableItemScript>().itemName);
+							Debug.Log(questManager.quest.questItemPrefab.GetComponent<CollectableItemScript>().itemName);
+						}
 					}
 
 					//Switch to the entry exit camera
@@ -240,17 +250,18 @@ public class PlayerScript : MonoBehaviour {
 					ResetUI();
 
 					//More the armature back to "zero"
-					armature.localPosition = armatureZeroPos;
+					//armature.localPosition = armatureZeroPos;
 
 					//Move the player object back to the spawn
-					transform.position = spawnPoint;
+					//transform.position = spawnPoint;
 
 					//Move the summoning circle back to "zero"
-					circle.localPosition = circleStartingPos;
+					//circle.localPosition = circleStartingPos;
 
 					//Rotate the summoning circle back to "zero"
-					circle.localEulerAngles = circleStartingEuler;
+					//circle.localEulerAngles = circleStartingEuler;
 
+					characterController.enabled = false;
 
 					//Lock the mouse
 					Cursor.lockState = CursorLockMode.Locked;
@@ -310,8 +321,8 @@ public class PlayerScript : MonoBehaviour {
 					if (Input.GetKeyDown(KeyCode.E)) {
 						//Set who you're talking to
 						dialogueTarget = nearbyNpc;
-						DialogueManager.StartConversation(dialogueTarget.dialogue, armature, nearbyNpc.transform, 0);
-						SetState("dialogue");
+						DialogueManager.StartConversation(questManager.quest.questItemPrefab.GetComponent<CollectableItemScript>().dialogue, armature, nearbyNpc.transform, 0);
+						StartDialogue();
 					}
 				}
 				else {
@@ -358,6 +369,13 @@ public class PlayerScript : MonoBehaviour {
 		}
 	}
 
+	private void OnDestroy() {
+		QuestLog.RemoveQuestStateObserver("QuestFetch", LuaWatchFrequency.EveryDialogueEntry, QuestFetch);
+		QuestLog.RemoveQuestStateObserver("QuestFailed", LuaWatchFrequency.EveryDialogueEntry, QuestFailed);
+		QuestLog.RemoveQuestStateObserver("QuestSuccess", LuaWatchFrequency.EveryDialogueEntry, QuestSuccess);
+		QuestLog.RemoveQuestStateObserver("StartFailedConversation", LuaWatchFrequency.EveryDialogueEntry, StartFailedConversation);
+	}
+
 	void SetSpawnPoint() {
 		var fallback = GameObject.Find("/PlayerSpawnPoint");
 		var npc = GameObject.FindAnyObjectByType<QuestGiverScript>();
@@ -392,23 +410,24 @@ public class PlayerScript : MonoBehaviour {
 		DialogueManager.StopAllConversations();
 	}
 
-	public void SpawnFetchQuestObject(Transform obj) {
-		questManager.quest.questItem = Instantiate(obj, new Vector3(0, 0, -999), Quaternion.identity, fetchItemsHolder);
+	public void SpawnFetchQuestObject() {
+		questManager.quest.questItem = Instantiate(questManager.quest.questItemPrefab, new Vector3(0, 0, -999), Quaternion.identity, fetchItemsHolder);
+		Debug.Log(questManager.quest.questItem.GetComponent<CollectableItemScript>().itemName);
 	}
 
-	public void SetQuestType(NPCScript npc) {
-		questManager.StartRandomQuest();
-
-
-		if (questManager.quest.questItem != null) {
-			SpawnFetchQuestObject(questManager.quest.questItem);
-		}
-	}
 
 	void ResetUI() {
 		UIPressEToCollect.SetActive(false);
 		UIPressEToTalk.SetActive(false);
 	}
+
+
+	void ResetAllQuests() {
+		QuestLog.SetQuestState("QuestFetch", QuestState.Unassigned);
+		QuestLog.SetQuestState("QuestFailed", QuestState.Unassigned);
+		QuestLog.SetQuestState("QuestSuccess", QuestState.Unassigned);
+	}
+
 
 	void ResetCameras() {
 		bool last = primaryCamera.enabled;
@@ -440,33 +459,39 @@ public class PlayerScript : MonoBehaviour {
 		ResetUI();
 	}
 
-	public void QuestFailed() {
+	public void QuestFailed(string questname, QuestState newstate) {
 		var questState = QuestLog.CurrentQuestState("QuestFailed");
 		if (questState == QuestLog.ActiveStateString) {
-			QuestLog.SetQuestState("QuestFailed", QuestState.Unassigned);
+			ResetAllQuests();
 			SetState("leaving level");
 		}
 	}
 
-	public void QuestSuccess() {
+	public void QuestSuccess(string questname, QuestState newstate) {
 		var questState = QuestLog.CurrentQuestState("QuestSuccess");
 		if (questState == QuestLog.ActiveStateString) {
-			QuestLog.SetQuestState("QuestSuccess", QuestState.Unassigned);
+			ResetAllQuests();
+
 			SetState("leaving level");
 		}
 	}
 
-	void QuestFetch() {
+	void QuestFetch(string questname, QuestState newstate) {
 		var questState = QuestLog.CurrentQuestState("QuestFetch");
 		if (questState == QuestLog.ActiveStateString) {
-			SetQuestType(nearbyNpc);
+			if (questManager.quest.questItemPrefab != null) {
+				SpawnFetchQuestObject();
+			}
+
 			SetState("playing");
 		}
 	}
 
-	public void StartFailedConversation() {
+	public void StartFailedConversation(string questname, QuestState newstate) {
 		var questState = QuestLog.CurrentQuestState("StartFailedConversation");
 		if (questState == QuestLog.ActiveStateString) {
+			ResetAllQuests();
+
 			DialogueManager.StartConversation("FailedSpeech", armature, armature, 0);
 		}
 	}

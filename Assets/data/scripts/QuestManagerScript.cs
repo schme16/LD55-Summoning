@@ -9,6 +9,7 @@ public class QuestManagerScript : MonoBehaviour {
 		public string dialogue;
 		public string questName;
 		public Transform questItem;
+		public Transform questItemPrefab;
 	}
 
 	public List<Transform> trophies;
@@ -25,6 +26,10 @@ public class QuestManagerScript : MonoBehaviour {
 
 
 	void Awake() {
+		var qms = GameObject.Find("QuestManager");
+		if (qms != null && qms != this.gameObject) {
+			Destroy(this.gameObject);
+		}
 		DontDestroyOnLoad(this);
 	}
 
@@ -34,7 +39,7 @@ public class QuestManagerScript : MonoBehaviour {
 			questType = "fetch",
 			dialogue = item.GetComponent<CollectableItemScript>().dialogue,
 			questName = "QuestFetch",
-			questItem = item
+			questItemPrefab = item
 		};
 	}
 
@@ -49,9 +54,9 @@ public class QuestManagerScript : MonoBehaviour {
 			player = GameObject.Find("player").GetComponent<PlayerScript>();
 		}
 		else if (player.isHomeBase) {
-			if (count > (randCount) && count < (randCount + 1)) {
+			
+			if (count > randCount && quest.questType == null) {
 				count = (randCount + 2);
-
 				StartRandomQuest();
 			}
 			else if (count < randCount) {
