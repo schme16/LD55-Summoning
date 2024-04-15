@@ -19,8 +19,9 @@ public class StarterAssetsPlayerAnimatorScript : MonoBehaviour {
     void Update() {
         anim.enabled = animEnabeled;
 
+        /*
         if (characterController.enabled) {
             circle.position = transform.position + circleOffset;
-        }
+        }*/
     }
 }

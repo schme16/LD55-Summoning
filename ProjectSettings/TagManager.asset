@@ -6,6 +6,8 @@ TagManager:
   tags:
   - CinemachineTarget
   - NPC
+  - trophySpawnPoint
+  - ExitPortalTrigger
   layers:
   - Default
   - TransparentFX

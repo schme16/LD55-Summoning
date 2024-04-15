@@ -6,18 +6,11 @@ public class NPCScript : MonoBehaviour {
 	public string questName;
 	public Transform questItem;
 
-	public PlayerScript player;
+	public QuestManagerScript questManager;
 
 	// Start is called before the first frame update
 	void Start() {
-		//Get the player object
-		player = GameObject.Find("player").GetComponent<PlayerScript>();
-		Debug.Log(player);
-
-		//Set a random fetch item
-		questItem = player.fetchQuestItemPrefabs[Random.Range(0, player.fetchQuestItemPrefabs.Length)];
-
-		Debug.Log(questItem);
+	
 	}
 
 	// Update is called once per frame

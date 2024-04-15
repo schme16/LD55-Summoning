@@ -38,20 +38,15 @@ public class SummoningCircleScript : MonoBehaviour {
 		e_mat = e.GetComponent<MeshRenderer>().material;
 		circle_mat = circle.GetComponent<MeshRenderer>().material;
 
-			a_mat.SetFloat("_dissolveAmount", max);
+		a_mat.SetFloat("_dissolveAmount", max);
 		b_mat.SetFloat("_dissolveAmount", max);
 		c_mat.SetFloat("_dissolveAmount", max);
 		d_mat.SetFloat("_dissolveAmount", max);
 		e_mat.SetFloat("_dissolveAmount", max);
 		circle_mat.SetFloat("_dissolveAmount", max);
-
-			
 	}
 
 	// Update is called once per frame
 	void Update() {
-		
 	}
-
-
 }

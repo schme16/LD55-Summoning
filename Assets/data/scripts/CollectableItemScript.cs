@@ -26,7 +26,6 @@ public class CollectableItemScript : MonoBehaviour {
 			transform.rotation = spawnPoint.rotation;
 		}
 		else {
-			Debug.Log(itemName + " is missing it's spawn points");
 		}
 	}
 
