@@ -83,7 +83,7 @@ MonoBehaviour:
   - id: 1
     fields:
     - title: Name
-      value: QuestMyHeartPills
+      value: QuestFetch
       type: 0
       typeString: 
     - title: Pictures
@@ -91,7 +91,7 @@ MonoBehaviour:
       type: 3
       typeString: CustomFieldType_Files
     - title: Description
-      value: Fetch Old Guy's heart pills
+      value: Someone always wants something...
       type: 0
       typeString: 
     - title: Success Description
@@ -227,7 +227,7 @@ MonoBehaviour:
       type: 0
       typeString: 
     - title: Initial Value
-      value: Heart Pills
+      value: <ITEM>
       type: 0
       typeString: CustomFieldType_Text
     - title: Description
@@ -396,7 +396,7 @@ MonoBehaviour:
         destinationDialogueID: 4
         isConnector: 0
         priority: 2
-      conditionsString: CurrentQuestState("QuestMyHeartPills") == "unassigned"
+      conditionsString: CurrentQuestState("QuestFetch") == "unassigned"
       userScript: 
       onExecute:
         m_PersistentCalls:
@@ -463,7 +463,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 263.65323
-        y: 304.5249
+        y: 302.80075
         width: 160
         height: 30
     - id: 3
@@ -951,7 +951,7 @@ MonoBehaviour:
       conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
-      userScript: SetQuestState("QuestMyHeartPills", "active")
+      userScript: SetQuestState("QuestFetch", "active")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -1005,7 +1005,7 @@ MonoBehaviour:
         destinationDialogueID: 13
         isConnector: 0
         priority: 2
-      conditionsString: CurrentQuestState("QuestMyHeartPills") == "returnToNPC"
+      conditionsString: CurrentQuestState("QuestFetch") == "returnToNPC"
       userScript: 
       onExecute:
         m_PersistentCalls:
@@ -1110,7 +1110,7 @@ MonoBehaviour:
       conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
-      userScript: 'SetQuestState("QuestMyHeartPills", "unassigned");
+      userScript: 'SetQuestState("QuestFetch", "unassigned");
 
         SetQuestState("QuestSuccess",
         "active")'
@@ -1161,7 +1161,7 @@ MonoBehaviour:
       falseConditionAction: Passthrough
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: CurrentQuestState("QuestMyHeartPills") == "active"
+      conditionsString: CurrentQuestState("QuestFetch") == "active"
       userScript: 
       onExecute:
         m_PersistentCalls:
@@ -1169,12 +1169,12 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 1284.7327
-        y: 108.39844
+        y: 106.969864
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 96.5983, y: 17.721497}
-    canvasZoom: 0.7900003
+    canvasScrollPosition: {x: 0, y: 0}
+    canvasZoom: 0.5800005
   - id: 2
     fields:
     - title: Title

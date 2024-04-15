@@ -15,7 +15,6 @@ public class PlayerScript : MonoBehaviour {
 	public Transform oldGuyNpc;
 	public Transform fetchItemsHolder;
 	public Transform[] spawnPoints;
-	public Transform[] fetchItemsSpawnLocations;
 	public Vector3 spawnPointOffset;
 	public Vector3 armatureZeroPos;
 	public Vector3 circleStartingPos;
@@ -45,24 +44,26 @@ public class PlayerScript : MonoBehaviour {
 	public GameObject UIPressEToTalk;
 
 
-	//Quest stuff
-	public string questType = "none";
-	public string questTypeLast = "none";
-	public string questName;
-	public Transform questItem;
-	public bool canCollectQuestItem;
-
-	
 	//Create a quest structure item
 	//Should allow me to have a bunch of preset quests
 	public struct Quest {
-		private string questType;
-		private string questName;
-		private Transform questItem;
+		public string questType;
+		public string dialogue;
+		public string questName;
+		public Transform questItem;
 	}
 
+	//Quest stuff
+	public string questTypeLast = "none";
+	public bool canCollectQuestItem;
+	public Quest quest;
+
+	//public string questName;
+	//public Transform questItem;
+
+
 	//Prefabs
-	public Transform HeartPillsPrefab;
+	public Transform[] fetchQuestItemPrefabs;
 
 
 	private Vector3 cameraTargetStartPos;
@@ -80,6 +81,8 @@ public class PlayerScript : MonoBehaviour {
 		cameraTargetStartPos = cameraTarget.localPosition;
 		cTargets.m_Targets[0].target = armature;
 
+
+		quest = new Quest();
 
 		ResetUI();
 	}
@@ -137,6 +140,7 @@ public class PlayerScript : MonoBehaviour {
 			else {
 				playerInput.ActivateInput();
 				playerInput.SwitchCurrentActionMap("Player");
+				Cursor.lockState = CursorLockMode.Locked;
 
 				inputs.cursorInputForLook = true;
 
@@ -144,23 +148,28 @@ public class PlayerScript : MonoBehaviour {
 			}
 		}
 
-		circle.localEulerAngles = new Vector3(circleStartingEuler.x, armature.localEulerAngles.y,
-			circleStartingEuler.z + circleStartingEuler.z);
+		circle.localEulerAngles = new Vector3(circleStartingEuler.x, armature.localEulerAngles.y, circleStartingEuler.z + circleStartingEuler.z);
 
 		/*
-		if (!isInDialogue && Input.GetKeyDown(KeyCode.I)) {
-			Debug.Log(1111111);
-			if (QuestLog.CurrentQuestState(questName) != QuestLog.ActiveStateString) {
-				Debug.Log(222222);
+			if (!isInDialogue && Input.GetKeyDown(KeyCode.I)) {
+				Debug.Log(1111111);
+				if (QuestLog.CurrentQuestState(questName) != QuestLog.ActiveStateString) {
+					Debug.Log(222222);
 
-				DialogueManager.StartConversation("Old Guy's Medicine", armature, oldGuyNpc, 0);
+					DialogueManager.StartConversation("Old Guy's Medicine", armature, oldGuyNpc, 0);
+				}
 			}
-		}*/
+		*/
 
 		if (!isAnimating && !isInDialogue) {
 			if (nearbyNPC) {
 				UIPressEToTalk.SetActive(true);
 				if (Input.GetKeyDown(KeyCode.E)) {
+					if (nearbyNPC.questType == "fetch") {
+						var item = nearbyNPC.questItem.GetComponent<CollectableItemScript>();
+						DialogueLua.SetVariable("CurrentItem", item.itemName);
+					}
+
 					DialogueManager.StartConversation(nearbyNPC.dialogue, armature, nearbyNPC.transform, 0);
 				}
 			}
@@ -174,8 +183,8 @@ public class PlayerScript : MonoBehaviour {
 
 
 		//Quest on change events
-		if (questType != questTypeLast) {
-			switch (questType) {
+		if (quest.questType != questTypeLast) {
+			switch (quest.questType) {
 				case "none":
 
 					break;
@@ -200,17 +209,18 @@ public class PlayerScript : MonoBehaviour {
 
 
 		//Quest each frame events
-		switch (questType) {
+		switch (quest.questType) {
 			case "none":
 
 				break;
 
 			case "fetch":
-				if (canCollectQuestItem && Input.GetKeyDown(KeyCode.E)) {
+				if (quest.questItem != null && canCollectQuestItem && Input.GetKeyDown(KeyCode.E)) {
 					canCollectQuestItem = false;
-					Destroy(questItem.gameObject);
+
+					Destroy(quest.questItem.gameObject);
 					ResetUI();
-					QuestLog.SetQuestState(questName, QuestState.ReturnToNPC);
+					QuestLog.SetQuestState(quest.questName, QuestState.ReturnToNPC);
 				}
 
 				break;
@@ -248,16 +258,20 @@ public class PlayerScript : MonoBehaviour {
 		DialogueManager.StopAllConversations();
 	}
 
-	public void SpawnFetchQuestObject(Transform obj, Vector3 pos) {
-		questItem = Instantiate(obj, pos, Quaternion.identity, fetchItemsHolder);
+	public void SpawnFetchQuestObject(Transform obj) {
+		quest.questItem = Instantiate(obj, new Vector3(0, 0, -999), Quaternion.identity, fetchItemsHolder);
 	}
 
-	public void SetQuestType(string type, string quest, Transform obj = null) {
-		questType = type;
-		questName = quest;
-		if (obj != null) {
-			SpawnFetchQuestObject(obj,
-				fetchItemsSpawnLocations[Random.Range(0, fetchItemsSpawnLocations.Length)].position);
+	public void SetQuestType(NPCScript npc) {
+		quest = new Quest {
+			questType = npc.questType,
+			dialogue = npc.dialogue,
+			questName = npc.questName,
+			questItem = npc.questItem
+		};
+
+		if (quest.questItem != null) {
+			SpawnFetchQuestObject(quest.questItem);
 		}
 	}
 
@@ -284,10 +298,11 @@ public class PlayerScript : MonoBehaviour {
 		}
 	}
 
-	public void QuestMyHeartPills() {
-		var state = QuestLog.CurrentQuestState("QuestMyHeartPills");
+	public void QuestFetch() {
+		var state = QuestLog.CurrentQuestState("QuestFetch");
 		if (state == QuestLog.ActiveStateString) {
-			SetQuestType("fetch", "QuestMyHeartPills", HeartPillsPrefab);
+			isAnimating = false;
+			SetQuestType(nearbyNPC);
 		}
 	}
 
@@ -299,21 +314,25 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	public void TriggerEnter(Collider other) {
-		if (other.transform == questItem) {
+		if (quest.questItem != null && other.transform == quest.questItem.transform) {
 			UIPressEToCollect.SetActive(true);
+			Debug.Log(22222222222);
+
 			canCollectQuestItem = true;
 		}
 		else if (other.CompareTag("NPC")) {
 			NPCScript npc = other.GetComponent<NPCScript>();
-			if (npc.dialogue.Length > 0) {
+			if (npc.dialogue != null && npc.dialogue.Length > 0) {
 				nearbyNPC = npc;
 			}
 		}
 	}
 
 	public void TriggerExit(Collider other) {
-		if (other.transform == questItem) {
+		if (quest.questItem != null && other.transform == quest.questItem.transform) {
 			UIPressEToCollect.SetActive(false);
+			Debug.Log(33333333333);
+
 			canCollectQuestItem = false;
 		}
 		else if (other.CompareTag("NPC")) {

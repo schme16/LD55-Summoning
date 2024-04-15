@@ -102,6 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Heart pills
   description: Looks like someone's heart medicine.
+  spawnPointsDirectory: pills
 --- !u!65 &6791257133081275845
 BoxCollider:
   m_ObjectHideFlags: 0

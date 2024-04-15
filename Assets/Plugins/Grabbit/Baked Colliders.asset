@@ -16574,6 +16574,7 @@ MonoBehaviour:
     - {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
     - {fileID: 8457681277307225655, guid: 90fd98e53b1ebf94d880770103d68c41, type: 3}
     - {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+    - {fileID: -6691176145451151428, guid: 615b3d3ec2f92e24d8eed371e96ea71d, type: 3}
     values:
     - maxMeshCount: 6
       Meshes:
@@ -16954,6 +16955,9 @@ MonoBehaviour:
     - maxMeshCount: 6
       Meshes:
       - {fileID: 8971381063151698908}
+      resolution: 300000
+    - maxMeshCount: 6
+      Meshes: []
       resolution: 300000
 --- !u!43 &29833757881047207
 Mesh:
