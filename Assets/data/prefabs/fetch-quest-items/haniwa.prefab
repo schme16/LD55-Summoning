@@ -234,7 +234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Haniwa
-  description: Some expertly made Japanese inspired pottery
+  dialogue: Old Guy's Haniwa
   spawnPointsDirectory: haniwa
 --- !u!65 &6757076129112915949
 BoxCollider:

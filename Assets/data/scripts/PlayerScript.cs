@@ -6,6 +6,7 @@ using StarterAssets;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using PixelCrushers.DialogueSystem;
+using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
 
 public class PlayerScript : MonoBehaviour {
@@ -63,6 +64,7 @@ public class PlayerScript : MonoBehaviour {
 	public string stateLast;
 
 
+	private bool portalOpen;
 	private Animator circleAnim;
 	private static readonly int Entering = Animator.StringToHash("entering");
 	private static readonly int Leaving = Animator.StringToHash("leaving");
@@ -139,6 +141,10 @@ public class PlayerScript : MonoBehaviour {
 				if (questManager.quest.questItem != null && canCollectQuestItem && Input.GetKeyDown(KeyCode.E)) {
 					canCollectQuestItem = false;
 
+					var item = Instantiate(questManager.quest.questItem);
+					item.parent = questManager.trophyHolder;
+					questManager.trophies.Add(item);
+					
 					Destroy(questManager.quest.questItem.gameObject);
 
 					UIPressEToCollect.SetActive(false);
@@ -208,6 +214,18 @@ public class PlayerScript : MonoBehaviour {
 					//Make the player face the spawn point
 					armature.LookAt(new Vector3(lookAtOnSpawn.x, armature.position.y, lookAtOnSpawn.z));
 
+					if (isHomeBase) {
+						questManager.StartRandomQuest();
+						
+						//Pick a new random time for the exit portal
+						questManager.randCount = Random.Range(30, 90);
+
+					}
+					
+					if (!isHomeBase && questManager.quest.questItem != null) {
+						DialogueLua.SetVariable("CurrentItem", questManager.quest.questItem.GetComponent<CollectableItemScript>().itemName);
+						Debug.Log(questManager.quest.questItem.GetComponent<CollectableItemScript>().itemName);
+					}
 
 					//Switch to the entry exit camera
 					SwitchToCamera(entryAndExitCamera);
@@ -290,14 +308,9 @@ public class PlayerScript : MonoBehaviour {
 					UIPressEToTalk.SetActive(true);
 
 					if (Input.GetKeyDown(KeyCode.E)) {
-						if (nearbyNpc.questType == "fetch") {
-							var item = nearbyNpc.questItem.GetComponent<CollectableItemScript>();
-							DialogueLua.SetVariable("CurrentItem", item.itemName);
-						}
-
 						//Set who you're talking to
 						dialogueTarget = nearbyNpc;
-						DialogueManager.StartConversation(nearbyNpc.dialogue, armature, nearbyNpc.transform, 0);
+						DialogueManager.StartConversation(dialogueTarget.dialogue, armature, nearbyNpc.transform, 0);
 						SetState("dialogue");
 					}
 				}
@@ -305,16 +318,16 @@ public class PlayerScript : MonoBehaviour {
 					UIPressEToTalk.SetActive(false);
 				}
 
-				if (isHomeBase && questManager.quest.questType != null) {
+				if (isHomeBase && questManager.quest.questType != null && !portalOpen) {
 					circleAnim.SetTrigger("portalReady");
-					
+					portalOpen = true;
 				}
 
 				if (isHomeBase) {
 					circle.localPosition = circleStartingPos;
 				}
 				else if (characterController.enabled) {
-					circle.position = transform.position + circleOffset;
+					circle.position = armature.position + circleOffset;
 				}
 
 
@@ -470,6 +483,11 @@ public class PlayerScript : MonoBehaviour {
 				nearbyNpc = npc;
 			}
 		}
+		//TODO: make the trigger zone only appear when you step out of the portals
+		else if (isHomeBase && other.CompareTag("ExitPortalTrigger")) {
+			//Trigger the player summon animation
+			circleAnim.SetTrigger(Leaving);
+		}
 	}
 
 	public void TriggerExit(Collider other) {
@@ -484,14 +502,5 @@ public class PlayerScript : MonoBehaviour {
 				nearbyNpc = null;
 			}
 		}
-
-		//TODO: make the trigger zone only appear when you step out of the portals
-		else if (isHomeBase && other.CompareTag("ExitPortalTrigger")) {
-			//Trigger the player summon animation
-			//circleAnim.SetTrigger(Leaving);
-			exitPortalTrigger.SetActive(false);
-		}
-
-		Debug.Log(other.CompareTag("ExitPortalTrigger"));
 	}
 }

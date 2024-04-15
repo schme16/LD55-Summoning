@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Heart pills
-  description: Looks like someone's heart medicine.
+  dialogue: Old Guy's Medicine
   spawnPointsDirectory: pills
 --- !u!65 &6791257133081275845
 BoxCollider:

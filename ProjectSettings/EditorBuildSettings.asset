@@ -6,6 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/data/scenes/home.unity
+    guid: e4f1266451860c04980fb11c11224171
+  - enabled: 1
+    path: Assets/data/scenes/playground.unity
+    guid: 86c93762387b4de42b8eda9d2bd20f83
+  - enabled: 1
+    path: Assets/data/scenes/main.unity
+    guid: 82465ea27afc0194a87497595d7f2173
+  - enabled: 1
+    path: Assets/data/scenes/menu.unity
+    guid: 13ed52c7206b8104090875c0e8fb61a6
+  - enabled: 1
     path: Assets/StarterAssets/ThirdPersonController/Scenes/Playground.unity
     guid: e9017d5f96b9f09489b4b37e1d6eb914
   m_configObjects: {}

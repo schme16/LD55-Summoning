@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CollectableItemScript : MonoBehaviour {
 	public string itemName;
-	public string description;
+	public string dialogue;
 	public string spawnPointsDirectory;
 	private List<Transform> spawnPoints;
 	private Transform spawnPoint;
