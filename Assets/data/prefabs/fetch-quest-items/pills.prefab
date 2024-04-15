@@ -189,6 +189,9 @@ MonoBehaviour:
   itemName: Heart pills
   dialogue: Old Guy's Medicine
   spawnPointsDirectory: pills
+  trophyPos: {x: 0, y: -0.18, z: 0}
+  trophyRot: {x: 0, y: 0, z: 0, w: 0}
+  trophyScale: {x: 0.37, y: 0.3130218, z: 0.37}
 --- !u!65 &6791257133081275845
 BoxCollider:
   m_ObjectHideFlags: 0

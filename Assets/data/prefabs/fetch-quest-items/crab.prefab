@@ -50,6 +50,9 @@ MonoBehaviour:
   itemName: Crab
   dialogue: Old Guy's Crab
   spawnPointsDirectory: crab
+  trophyPos: {x: 0, y: -0.53, z: 0}
+  trophyRot: {x: 0, y: 0, z: 0}
+  trophyScale: {x: 7.59, y: 7.59, z: 7.59}
 --- !u!65 &2227608596929152849
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -69,8 +72,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.2984084, y: 0.14304337, z: 0.30044222}
-  m_Center: {x: 0.0029101968, y: -0.15258959, z: 0.015574604}
+  m_Size: {x: 0.2984084, y: 0.12204334, z: 0.30044222}
+  m_Center: {x: 0.0029101968, y: 0.04153149, z: 0.015574604}
 --- !u!54 &-4834014021141994367
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -129,7 +132,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: dde7944e13d9f24448813ea1555a88f3,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.284111
+      value: -0.06
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: dde7944e13d9f24448813ea1555a88f3,
         type: 3}

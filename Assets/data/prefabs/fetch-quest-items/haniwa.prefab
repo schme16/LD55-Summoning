@@ -236,6 +236,9 @@ MonoBehaviour:
   itemName: Haniwa
   dialogue: Old Guy's Haniwa
   spawnPointsDirectory: haniwa
+  trophyPos: {x: 0, y: 2.11, z: -0.38}
+  trophyRot: {x: 0, y: 180, z: 0}
+  trophyScale: {x: 5.19, y: 5.19, z: 5.19}
 --- !u!65 &6757076129112915949
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -58,100 +58,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -6039417817715823231, guid: 62399d7893e029c439f69df8794ea016,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.63576823
-      objectReference: {fileID: 0}
-    - target: {fileID: -6039417817715823231, guid: 62399d7893e029c439f69df8794ea016,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.64962095
-      objectReference: {fileID: 0}
-    - target: {fileID: -6039417817715823231, guid: 62399d7893e029c439f69df8794ea016,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.856017
-      objectReference: {fileID: 0}
-    - target: {fileID: 330939144036027221, guid: 62399d7893e029c439f69df8794ea016,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.67234546
-      objectReference: {fileID: 0}
-    - target: {fileID: 330939144036027221, guid: 62399d7893e029c439f69df8794ea016,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.6827946
-      objectReference: {fileID: 0}
-    - target: {fileID: 330939144036027221, guid: 62399d7893e029c439f69df8794ea016,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -1.2848809
-      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 62399d7893e029c439f69df8794ea016,
         type: 3}
       propertyPath: m_Name
       value: couch
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395907985004231953, guid: 62399d7893e029c439f69df8794ea016,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.69186336
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395907985004231953, guid: 62399d7893e029c439f69df8794ea016,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.68718827
-      objectReference: {fileID: 0}
-    - target: {fileID: 1395907985004231953, guid: 62399d7893e029c439f69df8794ea016,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.21923935
-      objectReference: {fileID: 0}
-    - target: {fileID: 5224694813830001383, guid: 62399d7893e029c439f69df8794ea016,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.69
-      objectReference: {fileID: 0}
-    - target: {fileID: 5224694813830001383, guid: 62399d7893e029c439f69df8794ea016,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.835
-      objectReference: {fileID: 0}
-    - target: {fileID: 5224694813830001383, guid: 62399d7893e029c439f69df8794ea016,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.586
-      objectReference: {fileID: 0}
-    - target: {fileID: 6767124550369656612, guid: 62399d7893e029c439f69df8794ea016,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.018800676
-      objectReference: {fileID: 0}
-    - target: {fileID: 6767124550369656612, guid: 62399d7893e029c439f69df8794ea016,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.7391469
-      objectReference: {fileID: 0}
-    - target: {fileID: 6767124550369656612, guid: 62399d7893e029c439f69df8794ea016,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.20687878
-      objectReference: {fileID: 0}
-    - target: {fileID: 7534246568528090362, guid: 62399d7893e029c439f69df8794ea016,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.6899999
-      objectReference: {fileID: 0}
-    - target: {fileID: 7534246568528090362, guid: 62399d7893e029c439f69df8794ea016,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.835
-      objectReference: {fileID: 0}
-    - target: {fileID: 7534246568528090362, guid: 62399d7893e029c439f69df8794ea016,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.1940192
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -193,6 +103,9 @@ MonoBehaviour:
   itemName: Couch
   dialogue: Old Guy's Couch
   spawnPointsDirectory: couch
+  trophyPos: {x: 0, y: -0.56, z: 0}
+  trophyRot: {x: 0, y: 90, z: 0}
+  trophyScale: {x: 1, y: 1, z: 1}
 --- !u!65 &-2272933606939665917
 BoxCollider:
   m_ObjectHideFlags: 0

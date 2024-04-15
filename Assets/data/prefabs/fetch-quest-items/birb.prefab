@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 7743367658826671333}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.51092076}
+  m_LocalPosition: {x: 0, y: 0.193, z: -0.51092076}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -50,6 +50,9 @@ MonoBehaviour:
   itemName: Birb
   dialogue: Old Guy's birb
   spawnPointsDirectory: birb
+  trophyPos: {x: 0, y: -0.53, z: -0.51092076}
+  trophyRot: {x: 0, y: 284.54, z: 0}
+  trophyScale: {x: 8.55, y: 8.55, z: 8.55}
 --- !u!65 &2469711701166620171
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -69,8 +72,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.25, y: 0.20637095, z: 0.25}
-  m_Center: {x: 0, y: -0.051814526, z: 0}
+  m_Size: {x: 0.25, y: 0.19662724, z: 0.25}
+  m_Center: {x: 0, y: 0.11153827, z: 0}
 --- !u!54 &8381018824174478573
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -129,7 +132,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: bfef73754bdede946ba618e460886d23,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.185
+      value: -0.021
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bfef73754bdede946ba618e460886d23,
         type: 3}
@@ -184,7 +187,15 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -4414262051886069287, guid: bfef73754bdede946ba618e460886d23,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2238503158839164091}
+    - targetCorrespondingSourceObject: {fileID: -6538026702615372936, guid: bfef73754bdede946ba618e460886d23,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3917599525305314665}
   m_SourcePrefab: {fileID: 100100000, guid: bfef73754bdede946ba618e460886d23, type: 3}
 --- !u!4 &755256193023276516 stripped
 Transform:
@@ -192,3 +203,57 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1004739209953382927}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2933479046047730039 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -6538026702615372936, guid: bfef73754bdede946ba618e460886d23,
+    type: 3}
+  m_PrefabInstance: {fileID: 1004739209953382927}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &3917599525305314665
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2933479046047730039}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.5970647, y: 1.6030737, z: 0.0016028589}
+  m_Center: {x: 0.230044, y: 0.15297553, z: 0.3363889}
+--- !u!1 &5714198152349064150 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -4414262051886069287, guid: bfef73754bdede946ba618e460886d23,
+    type: 3}
+  m_PrefabInstance: {fileID: 1004739209953382927}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &2238503158839164091
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5714198152349064150}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.0862122, y: 3.0167134, z: 2.8353822}
+  m_Center: {x: 0.097526446, y: 0.19396164, z: 1.7532785}

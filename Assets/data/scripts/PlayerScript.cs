@@ -7,6 +7,7 @@ using StarterAssets;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using PixelCrushers.DialogueSystem;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -58,6 +59,14 @@ public class PlayerScript : MonoBehaviour {
 	public GameObject UIPressEToTalk;
 
 
+	public GameObject UI_QuestNew;
+	public GameObject UI_QuestInProgress;
+	public GameObject UI_QuestDone;
+	public TextMeshProUGUI UI_Timer;
+	public float timer;
+	public float startTime = 120;
+
+
 	//Quest stuff
 	public string questTypeLast = "none";
 	public bool canCollectQuestItem;
@@ -106,7 +115,8 @@ public class PlayerScript : MonoBehaviour {
 		SetSpawnPoint();
 
 		transform.position = spawnPoint;
-
+		timer = 0;
+		startTime = 120;
 		ResetUI();
 	}
 
@@ -149,7 +159,16 @@ public class PlayerScript : MonoBehaviour {
 				if (questManager.quest.questItem != null && canCollectQuestItem && Input.GetKeyDown(KeyCode.E)) {
 					canCollectQuestItem = false;
 
+					UI_QuestNew.SetActive(false);
+					UI_QuestDone.SetActive(true);
+					UI_QuestInProgress.SetActive(false);
+
 					var item = Instantiate(questManager.quest.questItem);
+					item.GetComponent<CollectableItemScript>().enabled = false;
+
+					Destroy(item.GetComponent<BoxCollider>());
+					Destroy(item.GetComponent<Rigidbody>());
+
 					item.parent = questManager.trophyHolder;
 					questManager.trophies.Add(item);
 
@@ -228,13 +247,17 @@ public class PlayerScript : MonoBehaviour {
 						questManager.quest = new QuestManagerScript.Quest();
 
 						//Pick a new random time for the exit portal
-						questManager.randCount = Random.Range(30, 90);
+						questManager.randCount = Random.Range(15, 35);
 					}
 					else {
 						if (questManager.quest.questItemPrefab != null) {
 							DialogueLua.SetVariable("CurrentItem", questManager.quest.questItemPrefab.GetComponent<CollectableItemScript>().itemName);
 							Debug.Log(questManager.quest.questItemPrefab.GetComponent<CollectableItemScript>().itemName);
 						}
+
+						UI_QuestNew.SetActive(true);
+						UI_QuestDone.SetActive(false);
+						UI_QuestInProgress.SetActive(false);
 					}
 
 					//Switch to the entry exit camera
@@ -242,6 +265,8 @@ public class PlayerScript : MonoBehaviour {
 
 					playerInput.SwitchCurrentActionMap("Dialogue");
 					playerInput.DeactivateInput();
+
+
 					break;
 
 				case "leaving level":
@@ -322,6 +347,8 @@ public class PlayerScript : MonoBehaviour {
 						//Set who you're talking to
 						dialogueTarget = nearbyNpc;
 						DialogueManager.StartConversation(questManager.quest.questItemPrefab.GetComponent<CollectableItemScript>().dialogue, armature, nearbyNpc.transform, 0);
+						Debug.Log(questManager.quest.questItemPrefab.GetComponent<CollectableItemScript>().dialogue);
+						
 						StartDialogue();
 					}
 				}
@@ -339,6 +366,20 @@ public class PlayerScript : MonoBehaviour {
 				}
 				else if (characterController.enabled) {
 					circle.position = armature.position + circleOffset;
+
+					if (timer < startTime) {
+						Debug.Log(11111);
+						timer += Time.deltaTime;
+
+						var ts = TimeSpan.FromSeconds(startTime - timer);
+
+						UI_Timer.text = $"{(ts.TotalMinutes - 1):00}:{ts.Seconds:00}";
+					}
+
+					else {
+						timer = startTime;
+						QuestFailed("QuestFetch", QuestState.Active);
+					}
 				}
 
 
@@ -482,6 +523,10 @@ public class PlayerScript : MonoBehaviour {
 			if (questManager.quest.questItemPrefab != null) {
 				SpawnFetchQuestObject();
 			}
+
+			UI_QuestNew.SetActive(false);
+			UI_QuestDone.SetActive(false);
+			UI_QuestInProgress.SetActive(true);
 
 			SetState("playing");
 		}

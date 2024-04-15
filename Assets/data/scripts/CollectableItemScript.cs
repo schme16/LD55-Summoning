@@ -6,6 +6,9 @@ public class CollectableItemScript : MonoBehaviour {
 	public string itemName;
 	public string dialogue;
 	public string spawnPointsDirectory;
+	public Vector3 trophyPos;
+	public Vector3 trophyRot;
+	public Vector3 trophyScale;
 	private List<Transform> spawnPoints;
 	private Transform spawnPoint;
 
