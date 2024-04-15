@@ -8,9 +8,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using PixelCrushers.DialogueSystem;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
+using PixelCrushers.DialogueSystem;
+
 
 public class PlayerScript : MonoBehaviour {
 	public Transform circle;
@@ -65,6 +66,7 @@ public class PlayerScript : MonoBehaviour {
 	public TextMeshProUGUI UI_Timer;
 	public float timer;
 	public float startTime = 120;
+	public GameObject UI_Group;
 
 
 	//Quest stuff
@@ -112,11 +114,13 @@ public class PlayerScript : MonoBehaviour {
 		QuestLog.AddQuestStateObserver("StartFailedConversation", LuaWatchFrequency.EveryDialogueEntry, StartFailedConversation);
 
 
+		DialogueManager.instance.conversationEnded += EndDialogue;
+
 		SetSpawnPoint();
 
 		transform.position = spawnPoint;
 		timer = 0;
-		startTime = 120;
+		startTime = 90;
 		ResetUI();
 	}
 
@@ -197,8 +201,16 @@ public class PlayerScript : MonoBehaviour {
 
 		//state on change events
 		if (state != stateLast) {
+			if (UI_Group != null) {
+				UI_Group.gameObject.SetActive(false);
+			}
+
 			switch (state) {
 				case "playing":
+
+					if (UI_Group != null) {
+						UI_Group.gameObject.SetActive(true);
+					}
 
 					playerInput.ActivateInput();
 					playerInput.SwitchCurrentActionMap("Player");
@@ -348,7 +360,7 @@ public class PlayerScript : MonoBehaviour {
 						dialogueTarget = nearbyNpc;
 						DialogueManager.StartConversation(questManager.quest.questItemPrefab.GetComponent<CollectableItemScript>().dialogue, armature, nearbyNpc.transform, 0);
 						Debug.Log(questManager.quest.questItemPrefab.GetComponent<CollectableItemScript>().dialogue);
-						
+
 						StartDialogue();
 					}
 				}
@@ -368,12 +380,9 @@ public class PlayerScript : MonoBehaviour {
 					circle.position = armature.position + circleOffset;
 
 					if (timer < startTime) {
-						Debug.Log(11111);
 						timer += Time.deltaTime;
 
-						var ts = TimeSpan.FromSeconds(startTime - timer);
-
-						UI_Timer.text = $"{(ts.TotalMinutes - 1):00}:{ts.Seconds:00}";
+						UI_Timer.text = FormatSeconds(startTime - timer);
 					}
 
 					else {
@@ -411,12 +420,23 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	private void OnDestroy() {
+		DialogueManager.instance.conversationEnded -= EndDialogue;
+
 		QuestLog.RemoveQuestStateObserver("QuestFetch", LuaWatchFrequency.EveryDialogueEntry, QuestFetch);
 		QuestLog.RemoveQuestStateObserver("QuestFailed", LuaWatchFrequency.EveryDialogueEntry, QuestFailed);
 		QuestLog.RemoveQuestStateObserver("QuestSuccess", LuaWatchFrequency.EveryDialogueEntry, QuestSuccess);
 		QuestLog.RemoveQuestStateObserver("StartFailedConversation", LuaWatchFrequency.EveryDialogueEntry, StartFailedConversation);
 	}
 
+
+    static string FormatSeconds(float seconds)
+    {
+        int minutes = (int)(seconds / 60);
+		seconds = Mathf.Ceil(seconds % 60);
+		var stringSeconds = seconds < 10 ? ("0" + seconds.ToString()) : seconds.ToString();
+        return $"{minutes}:{stringSeconds}";
+    }
+	
 	void SetSpawnPoint() {
 		var fallback = GameObject.Find("/PlayerSpawnPoint");
 		var npc = GameObject.FindAnyObjectByType<QuestGiverScript>();
@@ -446,10 +466,15 @@ public class PlayerScript : MonoBehaviour {
 		SetState("dialogue");
 	}
 
-	public void EndDialogue() {
+	public void EndDialogue(Transform actor) {
+		if (state == "dialogue") {
+			SetState("playing");
+		}
+
 		Cursor.lockState = CursorLockMode.Locked;
 		DialogueManager.StopAllConversations();
 	}
+
 
 	public void SpawnFetchQuestObject() {
 		questManager.quest.questItem = Instantiate(questManager.quest.questItemPrefab, new Vector3(0, 0, -999), Quaternion.identity, fetchItemsHolder);
@@ -501,8 +526,9 @@ public class PlayerScript : MonoBehaviour {
 	}
 
 	public void QuestFailed(string questname, QuestState newstate) {
-		var questState = QuestLog.CurrentQuestState("QuestFailed");
-		if (questState == QuestLog.ActiveStateString) {
+		Debug.Log(11111);
+
+		if (newstate == QuestState.Active) {
 			ResetAllQuests();
 			SetState("leaving level");
 		}
