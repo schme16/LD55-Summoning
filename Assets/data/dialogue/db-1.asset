@@ -456,8 +456,8 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: Hmmm? OH! That's right, I need my memory pills, but I forgot where
-          they are.
+        value: Hmmm? OH! That's right, I need my [var=CurrentItem], but I forgot
+          where they are.
         type: 0
         typeString: 
       - title: Sequence
@@ -490,7 +490,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 263.65323
-        y: 302.80075
+        y: 301.5349
         width: 160
         height: 30
     - id: 3
@@ -544,8 +544,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 972.5989
-        y: 480.72195
+        x: 980.19385
+        y: 488.3169
         width: 160
         height: 30
     - id: 4
@@ -681,7 +681,11 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "Oh good!\nNow I need someone to fetch me my [var=CurrentItem]\t\n"
+        value: 'Oh good!
+
+          Now I need someone to fetch me my [var=CurrentItem]
+
+'
         type: 0
         typeString: 
       - title: Sequence
@@ -709,7 +713,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 265.39236
+        x: 266.6582
         y: 388.9112
         width: 160
         height: 30
@@ -901,7 +905,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: If you're just going to go on about your todal dance you can go ahead
+        value: If you're just going to go on about your tidal dance you can go ahead
           and leave!
         type: 0
         typeString: 
@@ -916,13 +920,7 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 1
-        originDialogueID: 10
-        destinationConversationID: 2
-        destinationDialogueID: 0
-        isConnector: 0
-        priority: 2
+      outgoingLinks: []
       conditionsString: 
       userScript: 'SetQuestState("QuestFetch", "unassigned");
 
@@ -933,8 +931,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 975.0162
-        y: 564.2422
+        x: 977.5477
+        y: 574.3688
         width: 160
         height: 30
     - id: 11
@@ -1233,7 +1231,10 @@ MonoBehaviour:
       conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
-      userScript: SetQuestState("QuestFailed", "active")
+      userScript: 'SetQuestState("QuestFailed", "active")
+
+        SetQuestState("QuestFetch",
+        "unassigned");'
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -1349,7 +1350,7 @@ MonoBehaviour:
         height: 30
     entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 1
+    canvasZoom: 0.7600002
   - id: 5
     fields:
     - title: Title
@@ -1675,8 +1676,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 973.1387
-        y: 383.0821
+        x: 974.4044
+        y: 381.81625
         width: 160
         height: 30
     - id: 15
@@ -1785,8 +1786,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 352.857, y: 0}
-    canvasZoom: 0.7000003
+    canvasScrollPosition: {x: 305.14496, y: 0}
+    canvasZoom: 0.79
   - id: 6
     fields:
     - title: Title
